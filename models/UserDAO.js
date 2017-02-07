@@ -6,7 +6,7 @@ module.exports = {
 			{
 				id: id
 			})
-			.then(result => {
+			.then((result) => {
 				return result;
 			})
 			.catch((error) => {
