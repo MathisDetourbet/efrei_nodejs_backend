@@ -2,7 +2,7 @@ const DB = require('../models/Database');
 
 module.exports = {
 	getById(id) {
-		return DB.query('SELECT * FROM characters WHERE id=${id}', 
+		return DB.accessor.query('SELECT * FROM characters WHERE id=${id}', 
 			{
 				id: id
 			})
@@ -10,13 +10,13 @@ module.exports = {
 				return result;
 			})
 			.catch((error) => {
-
+				throw error; 
 			})
 
 	},
 
 	getAll() {
-		return DB.query('SELECT * FROM characters')
+		return DB.accessor.query('SELECT * FROM characters')
 			.then((result) => {
 				return result;
 			})
@@ -26,7 +26,7 @@ module.exports = {
 	},
 
 	create(name, class_name, user_id, point) {
-		return DB.query(
+		return DB.accessor.query(
 			'INSERT INTO characters(name, class_name, user_id, point) VALUES(${name}, ${class_name}, ${user_id}, ${point}) RETURNING *',
 			{
 				name 		: name,
@@ -43,7 +43,7 @@ module.exports = {
 	},
 
 	deleteById(id) {
-		return DB.query(
+		return DB.accessor.query(
 			'DELETE FROM characters WHERE id=${id}',
 			{
 				id: id
@@ -57,8 +57,8 @@ module.exports = {
 	},
 
 	updateById(id, name) {
-		return DB.query(
-			'UDPATE characters SET name=${name} WHERE id=${id}',
+		return DB.accessor.query(
+			'UPDATE characters SET name=${name} WHERE id=${id}',
 			{
 				id		: id,
 				name 	: name

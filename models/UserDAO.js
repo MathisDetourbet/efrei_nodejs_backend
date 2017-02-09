@@ -2,7 +2,7 @@ const DB = require('../models/Database');
 
 module.exports = {
 	getById(id) {
-		return DB.query('SELECT * FROM users WHERE id=${id}', 
+		return DB.accessor.query('SELECT * FROM users WHERE id=${id}', 
 			{
 				id: id
 			})
@@ -10,13 +10,13 @@ module.exports = {
 				return result;
 			})
 			.catch((error) => {
-
+				throw error; 
 			})
 
 	},
 
 	getAll() {
-		return DB.query('SELECT * FROM users')
+		return DB.accessor.query('SELECT * FROM users')
 			.then((result) => {
 				return result;
 			})
@@ -26,7 +26,7 @@ module.exports = {
 	},
 
 	create(username, email) {
-		return DB.query(
+		return DB.accessor.query(
 			'INSERT INTO users(name, email) VALUES(${username}, ${email}) RETURNING *',
 			{
 				username: username,
@@ -41,7 +41,7 @@ module.exports = {
 	},
 
 	deleteById(id) {
-		return DB.query(
+		return DB.accessor.query(
 			'DELETE FROM users WHERE id=${id}',
 			{
 				id: id
@@ -54,13 +54,14 @@ module.exports = {
 			})
 	},
 
-	updateById(id, username, email) {
-		return DB.query(
-			'UDPATE users SET username=${username}, email=${email} WHERE id=${id}',
+	updateById(id, name, email, alliance_id) {
+		return DB.accessor.query(
+			'UPDATE users SET name=${name}, email=${email}, alliance_id=${alliance_id} WHERE id=${id} RETURNING *',
 			{
-				id		: id,
-				username: username,
-				email	: email
+				id			: id,
+				name		: name,
+				email		: email, 
+				alliance_id : alliance_id
 			})
 			.then((user) => {
 				return user;

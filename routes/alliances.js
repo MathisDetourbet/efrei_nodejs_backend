@@ -8,7 +8,11 @@ router.get('/', function(req, res, next) {
 	AlliancesDAO.getAll()
 	.then((alliances) => {
 		res.send(alliances);
-	});
+	})
+	.catch((error) => {
+		res.status(500); 
+		res.send(error); 
+	})
 });
 
 router.get('/:id', function(req, res, next) {
@@ -17,7 +21,24 @@ router.get('/:id', function(req, res, next) {
 	AlliancesDAO.getById(id)
 	.then((alliance) => {
 		res.send(alliance);
-	});
+	})
+	.catch((error) => {
+		res.status(500); 
+		res.send(error); 
+	})
+});
+
+router.get('/:id/users', function(req, res, next) {
+	var id = parseInt(req.params.id); 
+
+	AlliancesDAO.getUsersByAlliance(id)
+	.then((users) =>{
+		res.send(users);
+	})
+	.catch((error) => {
+		res.status(500); 
+		res.send(error); 
+	})
 });
 
 router.post('/', function(req, res, next) {
@@ -30,7 +51,7 @@ router.post('/', function(req, res, next) {
 	} else {
 		AlliancesDAO.create(name)
 		.then((result) => {
-			res.status(201);
+			res.status(200);
 			res.json(result);
 		})
 		.catch((error) => {
@@ -45,7 +66,7 @@ router.delete('/:id', function(req, res, next) {
 	
 	AlliancesDAO.deleteById(id)
 	.then(() => {
-		res.status(201);
+		res.status(200);
 		res.send('Alliance with id ' + id + 'deleted');
 	})
 	.catch((error) => {
@@ -65,7 +86,7 @@ router.put('/:id', function(req, res, next) {
 	} else {
 		AlliancesDAO.updateById(id, name)
 		.then((alliance) => {
-			res.status(201);
+			res.status(200);
 			res.json(alliance);
 		})
 		.catch((error) => {

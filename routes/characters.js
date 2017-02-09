@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const CharacterDAO = require('../models/CharacterDAO');
+const CharacterDAO = require('../models/CharactersDAO');
 
 // GET /characters : renvoie tous les characters + 200
 /* GET characters listing. */

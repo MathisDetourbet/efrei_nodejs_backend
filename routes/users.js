@@ -31,7 +31,7 @@ router.post('/', function(req, res, next) {
 	} else {
 		UserDAO.create(username, email)
 		.then((result) => {
-			res.status(201);
+			res.status(200);
 			res.json(result);
 		})
 		.catch((error) => {
@@ -46,7 +46,7 @@ router.delete('/:id', function(req, res, next) {
 	
 	UserDAO.deleteById(id)
 	.then(() => {
-		res.status(201);
+		res.status(200);
 		res.send('User with id ' + id + 'deleted');
 	})
 	.catch((error) => {
@@ -56,22 +56,21 @@ router.delete('/:id', function(req, res, next) {
 });
 
 router.put('/:id', function(req, res, next) {
-	var idParams 	= parseInt(req.params.id);
-	var idBody		= parseInt(req.body.id);
+	var id		 	= parseInt(req.params.id);
 	var name 		= req.body.name;
+	var email		= req.body.email; 
+	var alliance_id	= req.body.alliance_id; 
 
-	if (name === undefined) {
-		res.status(422);
-		res.send('Name is undefined');
+	console.log("Name : "+name+" Email : "+email+" AllianceID : "+alliance_id); 
 
-	} else if (idParams !== idBody) {
+	if (name === undefined || email === undefined || alliance_id === undefined) {
 		res.status(422);
-		res.send('Param ID is not equal to the body ID.');
+		res.send('One or more textfield are undefined');
 
 	} else {
-		UserDAO.updateById(id, username, email)
+		UserDAO.updateById(id, name, email, alliance_id)
 		.then((user) => {
-			res.status(201);
+			res.status(200);
 			res.json(user);
 		})
 		.catch((error) => {
