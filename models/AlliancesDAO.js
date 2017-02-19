@@ -94,5 +94,21 @@ module.exports = {
 			.catch((error) => {
 				throw error; 
 			})
+	},
+
+	getUsersByAllianceIdByClass(alliance_id, character_class) {
+		return DB.accessor.query(
+			'SELECT * FROM users WHERE alliance_id=${alliance_id} AND class=${character_class}',
+			{
+				alliance_id 	: alliance_id,
+				character_class	: character_class
+			})
+			.then((users) => {
+				return users;
+			})
+			.catch((error) => {
+				throw error;
+			}
+		)
 	}
 }

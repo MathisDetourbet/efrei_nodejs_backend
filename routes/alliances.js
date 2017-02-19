@@ -7,6 +7,7 @@ const AlliancesDAO = require('../models/AlliancesDAO');
 router.get('/', function(req, res, next) {
 	AlliancesDAO.getAll()
 	.then((alliances) => {
+		res.status(200);
 		res.send(alliances);
 	})
 	.catch((error) => {
@@ -20,6 +21,7 @@ router.get('/:id', function(req, res, next) {
 	
 	AlliancesDAO.getById(id)
 	.then((alliance) => {
+		res.status(200);
 		res.send(alliance);
 	})
 	.catch((error) => {
@@ -32,12 +34,28 @@ router.get('/:id/users', function(req, res, next) {
 	var id = parseInt(req.params.id); 
 
 	AlliancesDAO.getUsersByAlliance(id)
-	.then((users) =>{
+	.then((users) => {
+		res.status(200);
 		res.send(users);
 	})
 	.catch((error) => {
 		res.status(500); 
 		res.send(error); 
+	})
+});
+
+router.get('/:id/characters/:class', function(req, res, next) {
+	var id = parseInt(req.params.id);
+	var character_class = req.params.class;
+
+	AlliancesDAO.getUsersByAllianceIdByClass(id, character_class)
+	.then((users) => {
+		res.status(200);
+		res.send(users);
+	})
+	.catch((error) => {
+		res.status(500);
+		res.send(error);
 	})
 });
 
