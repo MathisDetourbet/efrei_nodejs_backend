@@ -12,6 +12,10 @@ router.get('/', function(req, res, next) {
           status: 'success',
           users: users
         });
+	})
+	.catch((error) => {
+		res.status(500);
+		res.send(error);
 	});
 });
 
@@ -25,6 +29,10 @@ router.get('/:id', function(req, res, next) {
           status: 'success',
           user: user[0]
         });
+	})
+	.catch((error) => {
+		res.status(500);
+		res.send(error);
 	});
 });
 

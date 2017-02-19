@@ -25,19 +25,19 @@ module.exports = {
 			})
 	},
 
-	create(name, class_name, user_id, point) {
+	create(name, class_name, user_id, position) {
 		return DB.accessor.query(
-			'INSERT INTO characters(name, class_name, user_id, point) VALUES(${name}, ${class_name}, ${user_id}, ${point}) RETURNING *',
+			'INSERT INTO characters(name, class, user_id, position) VALUES(${name}, ${class_name}, ${user_id}, ${position}) RETURNING *',
 			{
 				name 		: name,
 				class_name	: class_name,
 				user_id		: user_id, 
-				point		: point
+				position	: (position.x, position.y)
 			})
 			.then((result) => {
 				return result;
 			})
-			.catch((error) => {
+			.catch((error) => { 
 				throw error;
 			})
 	},
