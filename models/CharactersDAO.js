@@ -12,7 +12,6 @@ module.exports = {
 			.catch((error) => {
 				throw error; 
 			})
-
 	},
 
 	getAll() {
@@ -40,12 +39,13 @@ module.exports = {
 
 	create(name, class_name, user_id, position) {
 		return DB.accessor.query(
-			'INSERT INTO characters(name, class, user_id, position) VALUES(${name}, ${class_name}, ${user_id}, ${position}) RETURNING *',
+			'INSERT INTO characters(name, class, user_id, position) VALUES(${name}, ${class_name}, ${user_id}, point(${positionX},${positionY}) ) RETURNING *',
 			{
 				name 		: name,
 				class_name	: class_name,
 				user_id		: user_id, 
-				position	: (position.x, position.y)
+				positionX 	: position.x,
+				positionY	: position.y 
 			})
 			.then((result) => {
 				return result;
@@ -58,6 +58,7 @@ module.exports = {
 	deleteById(id) {
 		return DB.accessor.query(
 			'DELETE FROM characters WHERE id=${id}',
+			//'DELETE FROM characters WHERE id=13',
 			{
 				id: id
 			})
@@ -69,12 +70,16 @@ module.exports = {
 			})
 	},
 
-	updateById(id, name) {
+	updateById(id, name, class_name, user_id, position) {
 		return DB.accessor.query(
-			'UPDATE characters SET name=${name} WHERE id=${id}',
+			'UPDATE characters SET name=${name}, class=${class_name}, user_id=${user_id}, position=point(${positionX}, ${positionY})  WHERE id=${id} RETURNING *',
 			{
-				id		: id,
-				name 	: name
+				id			: id,
+				name 		: name,
+				class_name	: class_name,
+				user_id		: user_id, 
+				positionX 	: position.x,
+				positionY	: position.y  
 			})
 			.then((character) => {
 				return character;

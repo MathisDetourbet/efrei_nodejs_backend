@@ -89,38 +89,51 @@ router.post('/', function(req, res, next) {
 }); 
 
 // DELETE /characters/id : supprime le character avec l'id + 200
-router.delete('/:id', function(res, req, next) {
-	var id = parseInt(req.params.id); 
-
+router.delete('/:id', function(req, res, next) {
+	var id = parseInt(req.params.id);
+	
 	CharacterDAO.deleteById(id)
 	.then(() => {
-		res.status(200); 
-		res.send('Character with id '+id+' deleted with success'); 
+		res.status(200)
+		.json({
+			status 	: 'success', 
+			message : []
+		});
 	})
 	.catch((error) => {
-		res.status(500); 
-		res.send(error); 
+		res.status(500);
+		res.send(error);
 	})
 });
 
 // PUT : /characters/id : modifie (name) + 200 + le character modifié
-router.put('/:id', function(res, req, next) {
-	var id 			= parseInt(req.params.id); 
-	var name 		= req.body.name;
+router.put('/:id', function(req, res, next) {
+	var id		 	= parseInt(req.params.id);
+	var name 		= req.body.character.name;
+	var class_name 	= req.body.character.class; 
+	var user_id 	= req.body.character.user_id; 
+	var position 	= req.body.character.position; 
 
-	if (name === undefined) {
+	if (name 		=== undefined || 
+		class_name 	=== undefined || 
+		user_id 	=== undefined || 
+		position 	=== undefined ) {
 		res.status(422); 
-		res.send('Name is not defined');
+		res.send('Field is not defined');
 
 	} else {
-		CharacterDAO.upddateById(id, name)
+		CharacterDAO.updateById(id, name, class_name, user_id, position)
 		.then((character) => {
-			res.status(200); 
-			res.json(character); 
+			res.status(200)
+			.json({
+				status 		: 'success', 
+				message 	: 'modified a character', 
+				character 	: character[0] 
+			}); 
 		})
 		.catch((error) => {
-			res.status(500); 
-			res.send(error); 
+			res.status(500);
+			res.send(error);
 		})
 	}
 });
