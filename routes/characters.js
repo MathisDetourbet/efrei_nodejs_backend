@@ -35,7 +35,24 @@ router.get('/:id', function(req, res, next) {
 		res.status(500);
 		res.send(error);
 	});
-}); 
+});
+
+router.get('/all/:class', function(req, res, next) {
+	var character_class = req.params.class;
+
+	CharacterDAO.getAllByClass(character_class)
+	.then((characters) => {
+		res.status(200)
+		.json({
+			status 		: 'success', 
+			characters 	: characters
+		});
+	})
+	.catch((error) => {
+		res.status(500);
+		res.send(error);
+	});
+});
 
 // POST /characters : créer un character avec (name, class, user_id, point) + 200 + nouvel character
 router.post('/', function(req, res, next) {
@@ -93,7 +110,8 @@ router.put('/:id', function(res, req, next) {
 
 	if (name === undefined) {
 		res.status(422); 
-		res.send('Name is not defined'); 
+		res.send('Name is not defined');
+
 	} else {
 		CharacterDAO.upddateById(id, name)
 		.then((character) => {

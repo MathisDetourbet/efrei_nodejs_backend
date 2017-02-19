@@ -25,6 +25,19 @@ module.exports = {
 			})
 	},
 
+	getAllByClass(character_class) {
+		return DB.accessor.query('SELECT * FROM characters WHERE class=${character_class}',
+			{
+				character_class: character_class
+			})
+			.then((characters) => {
+				return characters;
+			})
+			.catch((error) => {
+				throw error;
+			})
+	}, 
+
 	create(name, class_name, user_id, position) {
 		return DB.accessor.query(
 			'INSERT INTO characters(name, class, user_id, position) VALUES(${name}, ${class_name}, ${user_id}, ${position}) RETURNING *',
