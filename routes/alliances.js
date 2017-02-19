@@ -44,6 +44,7 @@ router.get('/:id/users', function(req, res, next) {
 	})
 });
 
+<<<<<<< HEAD
 router.get('/:id/characters/:class', function(req, res, next) {
 	var id = parseInt(req.params.id);
 	var character_class = req.params.class;
@@ -56,6 +57,18 @@ router.get('/:id/characters/:class', function(req, res, next) {
 	.catch((error) => {
 		res.status(500);
 		res.send(error);
+=======
+router.get('/:id/characters', function(req, res, next) {
+	var id = parseInt(req.params.id); 
+
+	AlliancesDAO.getCharactersByAlliance(id)
+	.then((characters) =>{
+		res.send(characters);
+	})
+	.catch((error) => {
+		res.status(500); 
+		res.send(error); 
+>>>>>>> baa0c97098cbcb8488efc4245bd5602ca09b8433
 	})
 });
 
