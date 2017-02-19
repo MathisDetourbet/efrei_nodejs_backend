@@ -41,6 +41,19 @@ router.get('/:id/users', function(req, res, next) {
 	})
 });
 
+router.get('/:id/characters', function(req, res, next) {
+	var id = parseInt(req.params.id); 
+
+	AlliancesDAO.getCharactersByAlliance(id)
+	.then((characters) =>{
+		res.send(characters);
+	})
+	.catch((error) => {
+		res.status(500); 
+		res.send(error); 
+	})
+});
+
 router.post('/', function(req, res, next) {
 	var name = req.body.name;
 

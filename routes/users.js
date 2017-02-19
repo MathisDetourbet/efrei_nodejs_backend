@@ -7,7 +7,11 @@ const UserDAO = require('../models/UserDAO');
 router.get('/', function(req, res, next) {
 	UserDAO.getAll()
 	.then((users) => {
-		res.send(users);
+		res.status(200)
+        .json({
+          status: 'success',
+          users: users
+        });
 	});
 });
 
@@ -16,23 +20,31 @@ router.get('/:id', function(req, res, next) {
 	
 	UserDAO.getById(id)
 	.then((user) => {
-		res.send(user);
+		res.status(200)
+        .json({
+          status: 'success',
+          user: user[0]
+        });
 	});
 });
 
 router.post('/', function(req, res, next) {
-	var username 	= req.body.username;
-	var email		= req.body.email;
+	var name 	= req.body.user.name;
+	var email	= req.body.user.email;
 
-	if ((username === undefined) || (email === undefined)) {
-		res.status(422);
-		res.send('username or email is invalid.');
+	if ((name === undefined) || (email === undefined)) {
+		res.status(422); 
+		res.send('name or email is invalid.');
 
 	} else {
-		UserDAO.create(username, email)
+		UserDAO.create(name, email)
 		.then((result) => {
-			res.status(200);
-			res.json(result);
+			res.status(200)
+			.json({
+				status 	: 'success', 
+				message	: 'Inserted one user',
+				user 	: result[0] 
+			});
 		})
 		.catch((error) => {
 			res.status(500);
@@ -46,8 +58,11 @@ router.delete('/:id', function(req, res, next) {
 	
 	UserDAO.deleteById(id)
 	.then(() => {
-		res.status(200);
-		res.send('User with id ' + id + 'deleted');
+		res.status(200)
+		.json({
+			status 	: 'success', 
+			message : []
+		});
 	})
 	.catch((error) => {
 		res.status(500);
@@ -57,24 +72,26 @@ router.delete('/:id', function(req, res, next) {
 
 router.put('/:id', function(req, res, next) {
 	var id		 	= parseInt(req.params.id);
-	var name 		= req.body.name;
-	var email		= req.body.email; 
-	var alliance_id	= req.body.alliance_id; 
-
-	console.log("Name : "+name+" Email : "+email+" AllianceID : "+alliance_id); 
+	var name 		= req.body.user.name;
+	var email		= req.body.user.email; 
+	var alliance_id	= req.body.user.alliance_id; 
 
 	if (name === undefined || email === undefined || alliance_id === undefined) {
-		res.status(422);
+		res.status(500);
 		res.send('One or more textfield are undefined');
 
 	} else {
 		UserDAO.updateById(id, name, email, alliance_id)
 		.then((user) => {
-			res.status(200);
-			res.json(user);
+			res.status(200)
+			.json({
+				status 	: 'success', 
+				message : 'modified a user', 
+				user 	: user[0]
+			});
 		})
 		.catch((error) => {
-			res.status(422);
+			res.status(500);
 			res.send(error);
 		})
 	}
